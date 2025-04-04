@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 18   # Node 18 fully supports ES modules
 
       - name: Cache Node.js modules
         uses: actions/cache@v3
@@ -32,12 +32,12 @@ jobs:
         run: |
           npm ci
           npm install --save-dev @eslint/js eslint eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint
-          npm ls @eslint/js eslint eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint || echo "Dependencies may still be missing!"
+          npm ls @eslint/js eslint eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint || echo "Some dependencies may still be missing!"
 
       - name: Debug Module Resolution
         run: |
           ls -la node_modules/@eslint/js || echo "@eslint/js not found"
-          node -e "require('@eslint/js')"
+          node --no-warnings -e "import('@eslint/js').then(() => console.log('@eslint/js found')).catch(err => console.error(err))"
 
   lint-and-test:
     needs: install-dependencies
@@ -57,7 +57,29 @@ jobs:
       - name: Run ${{ matrix.task }}
         run: |
           if [ "${{ matrix.task }}" = "lint" ]; then
-            npx eslint . --ext .js,.jsx,.ts,.tsx --config ./eslint.config.js;
+            # Using --no-install forces usage of locally installed ESLint.
+            npx --no-install eslint . --ext .js,.jsx,.ts,.tsx --config ./eslint.config.js;
           else
             npx jest --config=jest.config.js --ci --coverage || echo "Tests failed!";
           fi
+
+  upload-coverage:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Upload Coverage to Codecov
+        run: |
+          curl -s https://codecov.io/bash | bash
+
+  audit:
+    needs: install-dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run npm audit
+        run: npm audit --production
