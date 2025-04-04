@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743733076123" clover="3.2.0">
-  <project timestamp="1743733076123" name="All files">
+<coverage generated="1743734160530" clover="3.2.0">
+  <project timestamp="1743734160531" name="All files">
     <metrics statements="69" coveredstatements="55" conditionals="22" coveredconditionals="11" methods="7" coveredmethods="5" elements="98" coveredelements="71" complexity="0" loc="69" ncloc="69" packages="2" files="2" classes="2"/>
     <package name="server">
       <metrics statements="61" coveredstatements="47" conditionals="20" coveredconditionals="9" methods="6" coveredmethods="4"/>
-      <file name="server.js" path="C:\repo\Snippets\react-express-server-api\server\server.js">
+      <file name="server.js" path="C:\repo\github\react-express-server-api\server\server.js">
         <metrics statements="61" coveredstatements="47" conditionals="20" coveredconditionals="9" methods="6" coveredmethods="4"/>
         <line num="3" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
@@ -71,7 +71,7 @@
     </package>
     <package name="server.middleware">
       <metrics statements="8" coveredstatements="8" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
-      <file name="validateEnv.js" path="C:\repo\Snippets\react-express-server-api\server\middleware\validateEnv.js">
+      <file name="validateEnv.js" path="C:\repo\github\react-express-server-api\server\middleware\validateEnv.js">
         <metrics statements="8" coveredstatements="8" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="3" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
