@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          npm ls dotenv jest babel-jest @babel/core @babel/preset-env || echo "Some dependencies are missing!"
+          npm ls @eslint/js eslint eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint || echo "Some dependencies may be missing!"
 
   lint-and-test:
     needs: install-dependencies
@@ -67,4 +67,3 @@ jobs:
 
       - name: Run npm audit
         run: npm audit --production
-      
