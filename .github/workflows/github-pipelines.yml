@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18   # Using Node 18 which has robust ESM support
+          node-version: 18   # Using Node 18 for better ESM support
 
       - name: Cache Node.js modules
         uses: actions/cache@v3
@@ -54,10 +54,13 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install dependencies in lint-and-test job
+        run: npm ci
+
       - name: Run ${{ matrix.task }}
         run: |
           if [ "${{ matrix.task }}" = "lint" ]; then
-            # Directly invoke ESLint binary from node_modules
+            # Directly invoke the locally installed ESLint binary.
             ./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx --config ./eslint.config.js;
           else
             npx jest --config=jest.config.js --ci --coverage || echo "Tests failed!";
