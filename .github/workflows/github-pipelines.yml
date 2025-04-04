@@ -20,10 +20,21 @@ jobs:
         with:
           node-version: 20
 
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node
+
       - name: Install dependencies
         run: |
-          npm ci
-          npm ls @eslint/js eslint eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint || echo "Some dependencies may be missing!"
+          npm ci --verbose
+          npm ls @eslint/js eslint eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint || echo "Some dependencies may still be missing!"
+      
+      - name: Verify Installed Dependencies
+        run: npm ls --depth=0 || true
 
   lint-and-test:
     needs: install-dependencies
@@ -43,7 +54,7 @@ jobs:
       - name: Run ${{ matrix.task }}
         run: |
           if [ "${{ matrix.task }}" = "lint" ]; then
-            npx eslint . --ext .js,.jsx,.ts,.tsx;
+            npx eslint . --ext .js,.jsx,.ts,.tsx --config eslint.config.js;
           else
             npx jest --config=jest.config.js --ci --coverage || echo "Tests failed!";
           fi
@@ -60,6 +71,7 @@ jobs:
           curl -s https://codecov.io/bash | bash
 
   audit:
+    needs: install-dependencies
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
