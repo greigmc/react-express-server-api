@@ -39,5 +39,30 @@ npm run dev
 ```bash
 npm run test
 ```
-t
-```
+
+## CI/CD Pipeline Overview
+This project uses a GitHub Actions pipeline to automate our continuous integration and delivery process. The pipeline is triggered on every push and pull request to the main branch. Here’s what each step does:
+
+install-dependencies: Purpose: Checks out the repository, sets up Node.js (v18), and installs the project dependencies. Details:
+
+Caches npm modules to speed up subsequent builds.
+
+Installs additional ESLint and TypeScript-related packages for static code analysis.
+
+Provides a debug step to confirm module installation.
+
+lint-and-test: Purpose: Runs automated linting and testing jobs in parallel for improved code quality. Details:
+
+Lint Job: Executes ESLint over the repository to enforce code style and conventions.
+
+Test Job: Runs our Jest test suite to ensure that unit tests pass and code coverage requirements are met.
+
+upload-coverage: Purpose: Uploads test coverage reports to Codecov so we can monitor test performance over time. Details:
+
+This job is triggered after linting and testing, ensuring that coverage is only uploaded if the previous steps pass.
+
+audit: Purpose: Runs npm audit to check for known vulnerabilities in production dependencies. Details:
+
+Helps maintain security by ensuring no critical dependency issues exist.
+
+This pipeline helps catch errors and security issues early in the development cycle, ensuring high standards for the code that goes into production.
